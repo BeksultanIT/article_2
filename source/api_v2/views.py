@@ -5,8 +5,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api_v2.serializers import ArticleSerializer
-from webapp.models import Article
+from api_v2.serializers import ArticleSerializer, CommentSerializer
+from webapp.models import Article, Comment
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -50,3 +50,18 @@ class ArticleView(APIView):
         article_id = article.id
         article.delete()
         return Response({"id": article_id}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+class CommentView(APIView):
+    def get(self, request, article_id, pk=None, *args, **kwargs):
+        if pk is None:
+            comments = Comment.objects.filter(article_id=article_id)
+            serializer = CommentSerializer(comments, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            comment = get_object_or_404(Comment, pk=pk, article_id=article_id)
+            serializer = CommentSerializer(comment)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+

@@ -17,16 +17,3 @@ class ArticleSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         return super().validate(attrs)
 
-    # def create(self, validated_data):
-    #     tags = validated_data.pop('tags', [])
-    #     article = Article.objects.create(**validated_data)
-    #     article.tags.set(tags)
-    #     return article
-    #
-    # def update(self, instance, validated_data):
-    #     tags = validated_data.pop('tags', [])
-    #     for attr, value in validated_data.items():
-    #         setattr(instance, attr, value)
-    #     instance.save()
-    #     instance.tags.set(tags)
-    #     return instance

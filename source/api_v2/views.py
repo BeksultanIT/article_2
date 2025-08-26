@@ -19,10 +19,15 @@ def get_token_view(request, *args, **kwargs):
 
 
 class ArticleView(APIView):
-    def get(self, request, *args, **kwargs):
-        articles = Article.objects.all()
-        serializer = ArticleSerializer(articles, many=True)
-        return Response(serializer.data)
+    def get(self, request, pk=None, *args, **kwargs):
+        if pk is None:
+            articles = Article.objects.all()
+            serializer = ArticleSerializer(articles, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            article = get_object_or_404(Article, pk=pk)
+            serializer = ArticleSerializer(article)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         serializer = ArticleSerializer(data=request.data)
